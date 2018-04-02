@@ -18,9 +18,11 @@ class Problem extends Controller
      */
     public function index()
     {
+        $this->view->addData(['msg'=>'Wiiii']);
+        echo $this->view->render('error/index');
         // load views
-        require APP . 'view/_templates/header.php';
-        require APP . 'view/problem/index.php';
-        require APP . 'view/_templates/footer.php';
+        //require APP . 'view/_templates/header.php';
+        //require APP . 'view/problem/index.php';
+        //require APP . 'view/_templates/footer.php';
     }
 }

@@ -9,11 +9,10 @@ class UsuarioController extends Controller{
 
 	public function index(){
 		session_start();
-		if (isset($_SESSION['user']) && $_SESSION['user']->isAdmin()) {
-			$usuarios = Usuario::getAll();
-			require APP . 'view/_templates/header.php';
-        	require APP . 'view/usuarios/lista.php';        
-        	require APP . 'view/_templates/footer.php';
+		if (isset($_SESSION['user']) && $_SESSION['user']->isAdmin()) {			
+
+			$this->view->addData(['usuarios'=>Usuario::getAll()]);
+			echo $this->view->render('usuarios/lista');			
 		}		
 	}
 
@@ -182,12 +181,12 @@ class UsuarioController extends Controller{
 	}
 
 	public function editar($id){
-		session_start();
+		session_start();	
 		$usuario = Usuario::getById($id);
 		if ($usuario != NULL && (isset($_SESSION['user']) && $_SESSION['user']->isAdmin())) {
-			require APP . 'view/_templates/header.php';
-        	require APP . 'view/usuarios/editar.php';
-        	require APP . 'view/_templates/footer.php';
+
+			$this->view->addData(['usuario'=>$usuario]);
+			echo $this->view->render('usuarios/editar');			
 		}else{
 			$this->index();
 		}
@@ -211,14 +210,10 @@ class UsuarioController extends Controller{
 
 
 	public function login(){
-		require APP . 'view/_templates/header.php';
-        require APP . 'view/usuarios/login.php';
-        require APP . 'view/_templates/footer.php';		
+		echo $this->view->render('usuarios/login');			
 	}
 	
 	public function signUp(){
-		require APP . 'view/_templates/header.php';
-        require APP . 'view/usuarios/registrar.php';
-        require APP . 'view/_templates/footer.php';		
+		echo $this->view->render('usuarios/registrar');		
 	}
 }

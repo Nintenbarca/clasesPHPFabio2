@@ -7,55 +7,34 @@ class PostController extends Controller{
 	}
 
 	public function index()	{
-		$posts = Post::getAll();
 		include_once 'categoriacontroller.php';
 		new CategoriaController();
 		include_once 'usuariocontroller.php';
 		new UsuarioController();
-
-        require APP . 'view/_templates/header.php';
-        require APP . 'view/post/lista.php';
-        $this->formularioAnadir();
-        require APP . 'view/_templates/footer.php';
-	}
-
-	public function formularioAnadir(){
-		session_start();
-		include_once 'categoriacontroller.php';
-		new CategoriaController();
-		$categorias = Categoria::getAll();
-		if(isset($_SESSION['user'])){			
-			require APP . 'view/post/form.php';
-			
-		}else{			
-			echo "Debes estar logueado para poder crear un post (Accede <a href=\"".URL."usuariocontroller/login\">aqui</a>)";
-		}
+		$this->view->addData(['posts'=>Post::getAll(), 'categorias'=> Categoria::getAll()]);
+        echo $this->view->render('post/lista');
 	}
 
 	public function detail($id){		
-		$post = Post::get($id);
 		include_once 'categoriacontroller.php';
 		new CategoriaController();
 		include_once 'usuariocontroller.php';
 		new UsuarioController();
 
-		require APP . 'view/_templates/header.php';
-        require APP . 'view/post/detalle.php';        
-        require APP . 'view/_templates/footer.php';
-
+		$this->view->addData(['post'=>Post::get($id)]);
+		echo $this->view->render('post/detalle');
 	}
 
 	public function results(){
-		$query = $_POST['query'];
-		$posts = Post::getByFilter($query);
+		$query = $_POST['query'];		
 		include_once 'categoriacontroller.php';
 		new CategoriaController();
 		include_once 'usuariocontroller.php';
 		new UsuarioController();
+
+		$this->view->addData(['posts'=>Post::getByFilter($query)]);
+        echo $this->view->render('post/lista');	
 		
-		require APP . 'view/_templates/header.php';
-        require APP . 'view/post/lista.php';
-        require APP . 'view/_templates/footer.php';
 	}
 	
 	public function anadir(){
@@ -140,13 +119,13 @@ class PostController extends Controller{
 
 	public function editar($id = NULL){
 		include_once 'categoriacontroller.php';
-		new CategoriaController();
-		$categorias = Categoria::getAll();
+		new CategoriaController();		
 		if($id == NULL) $id = $_GET['id'];
 		$post = Post::get($id);
-		require APP . 'view/_templates/header.php';
-        require APP . 'view/post/editar.php';
-        require APP . 'view/_templates/footer.php';
+
+		$this->view->addData(['post'=>Post::get($id), 
+			'categorias'=>Categoria::getAll()]);
+		echo $this->view->render('post/editar');		
 	}
 
 	public function borrar(){

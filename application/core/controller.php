@@ -19,6 +19,7 @@ class Controller
     {
         $this->openDatabaseConnection();
         $this->loadModel();
+        $this->view = TemplatesFactory::templates(); 
     }
 
     /**
